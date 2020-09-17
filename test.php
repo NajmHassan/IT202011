@@ -1,1 +1,1 @@
-<?php "Hello Professor!" ?>x
+<?php echo "Hello Professor!" ?>
