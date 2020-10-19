@@ -6,6 +6,7 @@ if (isset($_POST["register"])) {
     $password = null;
     $confirm = null;
     $username = null;
+    $isValid=true;
     if (isset($_POST["email"])) {
         $email = $_POST["email"];
     }
@@ -17,8 +18,11 @@ if (isset($_POST["register"])) {
     }
     if (isset($_POST["username"])) {
         $username = $_POST["username"];
+	if(strpos($username,"@")){
+            echo "cannot have @ in your username!<br>";
+            $username = null;
+        }
     }
-    $isValid = true;
     //check if passwords match on the server side
     if ($password == $confirm) {
         echo "Passwords match <br>";
@@ -27,7 +31,7 @@ if (isset($_POST["register"])) {
         echo "Passwords don't match<br>";
         $isValid = false;
     }
-    if (!isset($email) || !isset($password) || !isset($confirm)) {
+    if (!isset($email) || !isset($password) || !isset($confirm) || !isset($username)) {
         $isValid = false;
     }
     //TODO other validation as desired, remember this is the last line of defense
@@ -42,7 +46,7 @@ if (isset($_POST["register"])) {
             $params = array(":email" => $email, ":username" => $username, ":password" => $hash);
             $r = $stmt->execute($params);
             //let's just see what's returned
-            echo "db returned: " . var_export($r, true);
+            //echo "db returned: " . var_export($r, true);
             $e = $stmt->errorInfo();
             if ($e[0] == "00000") {
                 echo "<br>Welcome! You successfully registered, please login.";

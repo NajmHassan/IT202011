@@ -41,7 +41,7 @@ if (isset($_POST["saved"])) {
     $newUsername = get_username();
     if (get_username() != $_POST["username"]) {
         $username = $_POST["username"];
-        $stmt = $db->prepare("SELECT COUNT(1) as InUse from Users where username = :username");
+ 	$stmt = $db->prepare("SELECT COUNT(1) as InUse from Users where username = :username");
         $stmt->execute([":username" => $username]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $inUse = 1;//default it to a failure scenario
@@ -53,6 +53,11 @@ if (isset($_POST["saved"])) {
 
             }
         }
+	if(strpos($username, "@")){
+            echo "cant have @";
+            $isValid = false;
+        }
+
         if ($inUse > 0) {
             echo "Username is already in use";
             //for now we can just stop the rest of the update
