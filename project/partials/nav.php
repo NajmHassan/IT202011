@@ -19,7 +19,7 @@ require_once(__DIR__ . "/../lib/helpers.php");
 	<i class="fas fa-id-badge"></i>
         <li><a href="profile.php">Profile</a></li>
 	<i class="fas fa-sign-out-alt"></i>
-	 <li><a href="login.php">Logout</a></li>
+	 <li><a href="logout.php">Logout</a></li>
     <?php endif; ?>
 </ul>
 </nav>

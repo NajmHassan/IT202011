@@ -8,10 +8,23 @@ if (!is_logged_in()) {
     flash("You must be logged in to access this page");
     die(header("Location: login.php"));
 }
-
+$isValid = true;
 $db = getDB();
+$stmt = $db->prepare("SELECT password from Users WHERE username = :username LIMIT 1");
+$params = array(":username" =>  $_SESSION["user"]['username']);
+$r = $stmt->execute($params);
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($result && isset($result["password"])) {
+    $password_hash_from_db = $result["password"];
+    if (isset($_POST["current"]) &&  !password_verify($_POST["current"], $password_hash_from_db)) {
+	    echo "Current passoword is not correct <br>"; 
+	    $isValid = false;
+    }
+}
+
 //save data if we submitted the form
-if (isset($_POST["saved"])) {
+if (isset($_POST["saved"]) && $isValid) {
     $isValid = true;
     //check if our email changed
     $newEmail = get_email();
@@ -54,6 +67,11 @@ if (isset($_POST["saved"])) {
 
             }
         }
+	if(strpos($username, "@")){
+		flash("cannot have '@' in username");
+		$isValid = false;
+	}
+
         if ($inUse > 0) {
             flash("Username already in use");
             //for now we can just stop the rest of the update
@@ -119,6 +137,11 @@ if (isset($_POST["saved"])) {
         <input type="password" name="password"/>
         <label for="cpw">Confirm Password</label>
         <input type="password" name="confirm"/>
-        <input type="submit" name="saved" value="Save Profile"/>
+
+        <label for="currentpw">Current Password</label>
+        <input type="password" name="current"/>
+
+	 <input type="submit" name="saved" value="Save Profile"/>
     </form>
+	<?php echo"Remember: <br> Cannot have '@' in your username <br> password cannot exceed 60 characters<br>";?>
 <?php require(__DIR__ . "/partials/flash.php");
