@@ -19,7 +19,7 @@ if (isset($_POST["login"])) {
 
 
     if (isset($_POST["input"])) {
-        $input = $_POST["input"];
+      $input = $_POST["input"];
     }
 
     if (strpos($input, "@")) {
@@ -31,18 +31,16 @@ if (isset($_POST["login"])) {
 
 
     //if (isset($_POST["email"])) {
-    //  $email = $_POST["email"];
+      //  $email = $_POST["email"];
     //}
 
     //if (isset($_POST["username"])) {
-    //$username = $_POST["username"];
-    //echo "username is set to $username";
+      //$username = $_POST["username"];
+      //echo "username is set to $username";
 
 //}
     if (isset($_POST["password"])) {
         $password = $_POST["password"];
-        echo "password is set";
-
     }
     $isValid = true;
     if (!isset($username) || !isset($email)) {
@@ -53,8 +51,8 @@ if (isset($_POST["login"])) {
 
 
     //if (!strpos($email, "@")) {
-    //  $isValid = false;
-    // echo "<br>Invalid username<br>";
+      //  $isValid = false;
+       // echo "<br>Invalid username<br>";
     //}
 
 
@@ -78,8 +76,7 @@ if (isset($_POST["login"])) {
             //echo "db returned: " . var_export($r, true);
             $e = $stmt->errorInfo();
             if ($e[0] != "00000") {
-                //echo "uh oh something went wrong: " . var_export($e, true);
-                flash("Something went wrong, please try again");
+                echo "uh oh something went wrong: " . var_export($e, true);
             }
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($result && isset($result["password"])) {
@@ -87,8 +84,6 @@ if (isset($_POST["login"])) {
                 if (password_verify($password, $password_hash_from_db)) {
                     $stmt = $db->prepare("
 SELECT Roles.name FROM Roles JOIN UserRoles on Roles.id = UserRoles.role_id where UserRoles.user_id = :user_id and Roles.is_active = 1 and UserRoles.is_active = 1");
-
-
                     $stmt->execute([":user_id" => $result["id"]]);
                     $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -102,21 +97,21 @@ SELECT Roles.name FROM Roles JOIN UserRoles on Roles.id = UserRoles.role_id wher
                         $_SESSION["user"]["roles"] = [];
                     }
                     //on successful login let's serve-side redirect the user to the home page.
-                    flash("Log in successful");
-                    die(header("Location: home.php"));
+                    header("Location: profile.php");
                 }
                 else {
-                    flash("Invalid password");
+                    echo "<br>Invalid password, please try again<br>";
                 }
             }
             else {
-                flash("Invalid user");
+                echo "<br>Invalid user, register first and you are able to login<br>";
             }
         }
     }
     else {
-        flash("There was a validation issue");
+        echo "There was a validation issue";
     }
 }
+
+
 ?>
-<?php require(__DIR__ . "/partials/flash.php");

@@ -9,10 +9,17 @@ if (isset($_POST["register"])) {
     $isValid=true;
     if (isset($_POST["email"])) {
         $email = $_POST["email"];
+	echo "email is valid <br>";
     }
     if (isset($_POST["password"])) {
         $password = $_POST["password"];
-    }
+	if(strlen($password) > 60){
+		echo "<br>password should be less than 60 characters<br>";
+		$isvalid = false;
+	}else{
+		echo "password is valid<br>";
+	}
+   }
     if (isset($_POST["confirm"])) {
         $confirm = $_POST["confirm"];
     }
@@ -21,7 +28,9 @@ if (isset($_POST["register"])) {
 	if(strpos($username,"@")){
             echo "cannot have @ in your username!<br>";
             $username = null;
-        }
+        }else{
+	      echo "<br>username valid<br>";
+	}
     }
     //check if passwords match on the server side
     if ($password == $confirm) {
@@ -84,3 +93,8 @@ if (!isset($username)) {
     <input type="password" id="p2" name="confirm" required/>
     <input type="submit" name="register" value="Register"/>
 </form>
+<?php
+echo "<br>remember: <br>";
+echo "cannot have '@' in your username<br>";
+echo "Password cannot exceed 60 characters<br>";
+?>
