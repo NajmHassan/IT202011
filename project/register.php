@@ -6,29 +6,39 @@ if (isset($_POST["register"])) {
     $password = null;
     $confirm = null;
     $username = null;
+
+    $isValid = true;
     if (isset($_POST["email"])) {
         $email = $_POST["email"];
     }
     if (isset($_POST["password"])) {
         $password = $_POST["password"];
+        if(strlen($password) > 60){
+      		flash("<br>password should be less than 60 characters<br>");
+      		$isvalid = false;
+        }
     }
     if (isset($_POST["confirm"])) {
         $confirm = $_POST["confirm"];
+
     }
     if (isset($_POST["username"])) {
         $username = $_POST["username"];
+	      if (strpos($username, "@")){
+          flash("cannot have '@' in your username");
+            $isValid = false;
+        }
     }
-    $isValid = true;
     //check if passwords match on the server side
     if ($password == $confirm) {
         //not necessary to show
-        //echo "Passwords match <br>";
+        echo "Passwords match <br>";
     }
     else {
         flash("Passwords don't match");
         $isValid = false;
     }
-    if (!isset($email) || !isset($password) || !isset($confirm)) {
+    if (!isset($email) || !isset($password) || !isset($confirm) ||!isset($username) ) {
         $isValid = false;
     }
     //TODO other validation as desired, remember this is the last line of defense
@@ -48,13 +58,13 @@ if (isset($_POST["register"])) {
             }
             else {
                 if ($e[0] == "23000") {//code for duplicate entry
-                    flash("Username or email already exists.");
+                    flash("Username or email already exists, please try a different one.");
                 }
                 else {
                     flash("An error occurred, please try again");
                 }
             }
-        }
+          }
     }
     else {
         flash( "There was a validation issue");

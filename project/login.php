@@ -41,7 +41,7 @@ if (isset($_POST["login"])) {
 //}
     if (isset($_POST["password"])) {
         $password = $_POST["password"];
-        echo "password is set";
+        //echo "password is set";
 
     }
     $isValid = true;
@@ -103,14 +103,14 @@ SELECT Roles.name FROM Roles JOIN UserRoles on Roles.id = UserRoles.role_id wher
                     }
                     //on successful login let's serve-side redirect the user to the home page.
                     flash("Log in successful");
-                    die(header("Location: home.php"));
+                    die(header("Location: profile.php"));
                 }
                 else {
-                    flash("Invalid password");
+                    flash("Invalid password, please try again");
                 }
             }
             else {
-                flash("Invalid user");
+                flash("Invalid user, please register first and then login");
             }
         }
     }
