@@ -69,4 +69,23 @@ function getMessages() {
 }
 
 //end flash
+
+
+
+
+
+
+
+
+function calcPrice($id, $quantity){
+
+  $db = getDB();
+  $stmt = $db->prepare("SELECT price FROM Products where id = :id");
+  $r = $stmt->execute([":id" => $id]);
+  $product = $stmt->fetch(PDO::FETCH_ASSOC);
+  $price = $product["price"] * $quantity;
+
+
+    return $price;
+}
 ?>
