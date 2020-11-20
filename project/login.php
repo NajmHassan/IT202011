@@ -1,13 +1,21 @@
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
+
+<div class="card" style="width: 18rem; height:20rem;  margin: 0 auto; float: none; margin-bottom: 10px; margin-top: 10px; padding-top: 30px; box-shadow: 2px 2px 5px 5px grey; /* Added */">
     <form method="POST">
-
-        <label for="input">username or Email:</label>
-        <input placeholder="enter email or username" id="input" name="input" required/>
-
-        <label for="p1">Password:</label>
-        <input type="password" placeholder="enter password" id="p1" name="password" required/>
-        <input type="submit" name="login" value="Login"/>
+      <div class="form-group">
+        <label for="input">Email address or username</label>
+        <input type="input" name="input" class="form-control" id="input" aria-describedby="emailHelp"  >
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label for="p1">Password</label>
+        <input  type="password" name="password" class="form-control" id="password">
+      </div>
+      <button  type="submit" name="login" value="Login" class="btn btn-primary">Login</button>
     </form>
+  </div>
+
+
 
 <?php
 if (isset($_POST["login"])) {
@@ -30,9 +38,10 @@ if (isset($_POST["login"])) {
     }
 
 
-    //if (isset($_POST["email"])) {
-    //  $email = $_POST["email"];
-    //}
+    if (isset($_POST["email"])) {
+      $email = $_POST["email"];
+      echo "username is set to $email";
+    }
 
     //if (isset($_POST["username"])) {
     //$username = $_POST["username"];
