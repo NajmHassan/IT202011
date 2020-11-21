@@ -1,10 +1,10 @@
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
 <?php
-if (!has_role("Admin")) {
+//if (!has_role("Admin")) {
     //this will redirect to login and kill the rest of this script (prevent it from executing)
-    flash("You don't have permission to access this page");
-    die(header("Location: login.php"));
-}
+  //  flash("You don't have permission to access this page");
+  //  die(header("Location: login.php"));
+//}
 ?>
 <?php
 $query = "";
@@ -14,7 +14,13 @@ if (isset($_POST["query"])) {
 }
 if (isset($_POST["search"]) && !empty($query)) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT name, price, id FROM Products WHERE name LIKE :name LIMIT 10");
+
+    if (!has_role("Admin")) {
+      $stmt = $db->prepare("SELECT name, price, id FROM Products WHERE name LIKE :name AND visibility = 1 LIMIT 10");
+    }else{
+      $stmt = $db->prepare("SELECT name, price, id FROM Products WHERE name LIKE :name LIMIT 10");
+    }
+
     $r = $stmt->execute([":name" => "%$query%"]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

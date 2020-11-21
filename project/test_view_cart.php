@@ -35,9 +35,10 @@ if (isset($id)) {
         <div class="card-body">
             <div>
                 <p>Details</p>
-                <div>Created by: <?php safer_echo($result["created"]); ?></div>
+                <div>Added to cart on: <?php safer_echo($result["created"]); ?></div>
                 <div>Cart ID: <?php safer_echo($result["id"]); ?></div>
-                <div>Products: <?php safer_echo($result["name"]); ?></div>
+                <div>Product: <?php safer_echo($result["name"]); ?></div>
+                <div>Quantity: <?php safer_echo($result["quantity"]); ?></div>
                 <div>Owned by: <?php safer_echo($result["username"]); ?></div>
             </div>
         </div>
