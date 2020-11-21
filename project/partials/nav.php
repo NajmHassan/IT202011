@@ -16,6 +16,7 @@ require_once(__DIR__ . "/../lib/helpers.php");
 <bla class="navbar navbar-expand-lg navbar-light bg-light">
   <img src="/docs/4.5/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
   <a class="navbar-brand" href="home.php">Y2K</a>
+
   <?php if (is_logged_in()): ?>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -31,10 +32,18 @@ require_once(__DIR__ . "/../lib/helpers.php");
     <form name="form" action="" method="get">
     <input class="form-control py-2 border-left-0 border" type="search" name="search" placeholder="search" id="search" />
   </form>
+<?php
+$search = "";
+if(isset($_GET["search"])){
+  $search = $_GET["search"];
+  echo "$search";
+}
+ ?>
 
     <span class="input-group-append">
       <button class="btn btn-light border-left-0 border" type="button">
-        <a href="test_edit_cart.php?search=<?php echo $_GET["input"];?>">
+        <a href="searchResults.php?search=<?php echo "$search";?>">
+
         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
           <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>

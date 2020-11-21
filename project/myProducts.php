@@ -8,9 +8,9 @@
 ?>
 <?php
 
-
 $results = [];
 $db = getDB();
+
 
 
 if (has_role("Admin")) {
@@ -20,10 +20,13 @@ else{
   $stmt = $db->prepare("SELECT * FROM Products WHERE  visibility = 1 LIMIT 10");
 }
 if (isset($_POST["sort"])) {
+
   $stmt = $db->prepare("SELECT * FROM Products WHERE  visibility = 1 ORDER BY price LIMIT 10");
+
 }
 elseif (isset($_POST["category"])){
   $stmt = $db->prepare("SELECT * FROM Products WHERE  visibility = 1 ORDER BY category LIMIT 10");
+
 }
 
 $r = $stmt->execute();
@@ -48,7 +51,7 @@ else {
 <?php if (count($results) > 0): ?>
     <?php foreach ($results as $r): ?>
       <div   class="card" style="width: 20rem; margin: 1em;">
-        <img src="..." class="card-img-top" alt="...">
+        <img src="" class="card-img-top" alt="...">
         <div class="card-body">
           <a href = "test_view_product.php?id=<?php safer_echo($r['id']); ?>" <h5 class="card-title"><?php safer_echo($r["name"]); ?></h5></a>
           <h6 class="card-title"><?php safer_echo($r["price"]); ?></h6>
