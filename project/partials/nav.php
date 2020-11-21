@@ -28,14 +28,18 @@ require_once(__DIR__ . "/../lib/helpers.php");
       <i class="fa fa-search" ></i>
       </div>
     </span>
-    <input class="form-control py-2 border-left-0 border" type="search" placeholder="search" id="example-search-input" />
+    <form name="form" action="" method="get">
+    <input class="form-control py-2 border-left-0 border" type="search" name="search" placeholder="search" id="search" />
+  </form>
+
     <span class="input-group-append">
       <button class="btn btn-light border-left-0 border" type="button">
-        <a href="home.php">
+        <a href="test_edit_cart.php?search=<?php echo $_GET["input"];?>">
         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
           <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
         </a>
+
       </svg>
     </button>
     </span>
@@ -83,6 +87,9 @@ require_once(__DIR__ . "/../lib/helpers.php");
       <?php if (is_logged_in()): ?>
           <li class="nav-item">
             <a class="nav-link" href="profile.php">profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="myProducts.php">PRODUCTS</a>
           </li>
 
           <li class="nav-item">
