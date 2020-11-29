@@ -1,20 +1,25 @@
 body { /* everything */
     font-family: arial;
-    font-size: 1.0em; 
+    font-size: 1.0em;
     text-align: center;
     display: block;
     margin: 0 auto 0 auto;
 
 }
-
+.bg-dark {
+background-color: #4c885b!important;
+}
 
 .nav > i{
 	color: white;
 }
+.signup-form:hover{
+  color: black;
+}
 
 
 ul[class="nav"]{ /* nav class */
-    
+
     list-style-type: none;
     overflow: hidden;
     background-color: #2dafc9;
@@ -24,57 +29,26 @@ ul[class="nav"]{ /* nav class */
 
 .nav > li {
     display: inline-block;
-    text-align:center; 
-    
+    text-align:center;
+
 }
 
 
 
 .nav > li a {
-    
+
     display: inline-block;
     color: #ffffff;
     text-align: center;
     padding: 14px;
     text-decoration: none;
-    
+
 }
 
 .nav > li a:hover {
     background-color: #3898ba;
-    
+
 }
 label {
         display: block;
-}
-
-input, select {
-    margin:0px auto;
-    margin-bottom: 30;
-    width: 300;
-    padding: 6px 1px;
-    margin-right:;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    box-sizing: border-box;
-    
-    display: block;
-    
-    
-}
-
-
-input[type=submit] {
-    
-    width: 120;
-    font-size: 14;
-    background-color: #2dafc9;
-    color: white;
-    padding: 12px 2px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    margin:0px auto;
-    
 }

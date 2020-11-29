@@ -4,12 +4,12 @@
     <form method="POST">
       <div class="form-group">
         <label for="input">Email address or username</label>
-        <input type="input" name="input" class="form-control" id="input" aria-describedby="emailHelp"  >
+        <input type="input" name="input" class="form-control" id="input" aria-describedby="emailHelp" required >
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
       </div>
       <div class="form-group">
         <label for="p1">Password</label>
-        <input  type="password" name="password" class="form-control" id="password">
+        <input  type="password" name="password" class="form-control" id="password" required>
       </div>
       <button  type="submit" name="login" value="Login" class="btn btn-primary">Login</button>
     </form>
@@ -128,4 +128,5 @@ SELECT Roles.name FROM Roles JOIN UserRoles on Roles.id = UserRoles.role_id wher
     }
 }
 ?>
-<?php require(__DIR__ . "/partials/flash.php");
+
+<?php require_once(__DIR__ . "/partials/flash.php"); ?>

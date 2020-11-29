@@ -78,16 +78,34 @@ if (!isset($username)) {
     $username = "";
 }
 ?>
-    <form method="POST">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required value="<?php safer_echo($email); ?>"/>
-        <label for="user">Username:</label>
-        <input type="text" id="user" name="username" required maxlength="60" value="<?php safer_echo($username); ?>"/>
-        <label for="p1">Password:</label>
-        <input type="password" id="p1" name="password" required/>
-        <label for="p2">Confirm Password:</label>
-        <input type="password" id="p2" name="confirm" required/>
-        <input type="submit" name="register" value="Register"/>
- </form>
+
+<div class="signup-form" style="margin-left: 400;width: 400; color: grey;
+border-radius: 3px;
+margin-bottom: 15px;
+background: rgb(181, 226, 197);
+box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+padding: 30px;">
+    <form method="post">
+		<h2 style = "text-align: center;">~ Register ~</h2>
+		<p class="hint-text">Create your account here to view all our products!</p>
+        <div class="form-group">
+          <input class="form-control"  placeholder="Username" id="user" name="username" required maxlength="60" value="<?php safer_echo($username); ?>"</div>
+        </div>
+        <div class="form-group">
+        	<input class="form-control" placeholder="Email" type="email" id="email" name="email" required value="<?php safer_echo($email); ?>">
+        </div>
+		<div class="form-group">
+            <input class="form-control" placeholder="Password" type="password" id="p1" name="password" required>
+        </div>
+		<div class="form-group">
+            <input  class="form-control" placeholder=" Comfirm Password"  type="password" id="p2" name="confirm" required>
+        </div>
+
+		<div class="form-group">
+            <button class="btn btn-secondary btn-lg btn-block" type="submit" name="register" value="Register" style="background-color: white; color: grey; border-color: #ffffff;" >Register</button>
+        </div>
+    </form>
+	<div class="text-center">Already have an account? <a href="login.php">Sign in</a></div>
+</div>
 <?php flash("rememeber: <br> cannot have '@' in your username <br> Password cannot exceed 60 characters ");?>
 <?php require(__DIR__ . "/partials/flash.php");
