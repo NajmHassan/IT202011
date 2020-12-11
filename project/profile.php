@@ -8,6 +8,7 @@ if (!is_logged_in()) {
     flash("You must be logged in to access this page");
     die(header("Location: login.php"));
 }
+
 $isValid = true;
 $db = getDB();
 $stmt = $db->prepare("SELECT password from Users WHERE username = :username LIMIT 1");
@@ -18,7 +19,7 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($result && isset($result["password"])) {
     $password_hash_from_db = $result["password"];
     if (isset($_POST["current"]) &&  !password_verify($_POST["current"], $password_hash_from_db)) {
-	    echo "Current passoword is not correct <br>"; 
+	    echo "Current passoword is not correct <br>";
 	    $isValid = false;
     }
 }
@@ -124,7 +125,6 @@ if (isset($_POST["saved"]) && $isValid) {
     }
 }
 
-
 ?>
 
     <form method="POST">
@@ -142,6 +142,7 @@ if (isset($_POST["saved"]) && $isValid) {
         <input type="password" name="current"/>
 
 	 <input type="submit" name="saved" value="Save Profile"/>
+   <a href="pastOrders.php" class="btn btn-primary">past orders</a>
     </form>
 	<?php echo"Remember: <br> Cannot have '@' in your username <br> password cannot exceed 60 characters<br>";?>
 <?php require(__DIR__ . "/partials/flash.php");
