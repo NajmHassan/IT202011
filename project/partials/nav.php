@@ -110,7 +110,7 @@ background-color: #4c885b!important;
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="test_create_product.php">create product</a>
           <a class="dropdown-item" href="test_list_product.php">View product</a>
-
+          <a class="dropdown-item" href="adminOrders.php">view past orders</a>
           <a class="dropdown-item" href="test_create_cart.php">create Cart</a>
           <a class="dropdown-item" href="test_list_cart.php">View Cart</a>
           <div class="dropdown-divider"></div>
