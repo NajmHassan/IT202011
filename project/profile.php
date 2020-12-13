@@ -19,10 +19,32 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($result && isset($result["password"])) {
     $password_hash_from_db = $result["password"];
     if (isset($_POST["current"]) &&  !password_verify($_POST["current"], $password_hash_from_db)) {
-	    echo "Current passoword is not correct <br>";
+	    flash ("Current passoword is not correct");
 	    $isValid = false;
     }
 }
+
+
+if (isset($_POST["public"])){
+  $stmt = $db->prepare("UPDATE Users set privacy = 1 where id = :id");
+  $r = $stmt->execute([":id" => get_user_id()]);
+  flash("profile updated to public");
+}
+if (isset($_POST["private"])){
+  $stmt = $db->prepare("UPDATE Users set privacy = 0 where id = :id");
+  $r = $stmt->execute([":id" => get_user_id()]);
+  flash("profile updated to private");
+}
+
+if (isset($_GET["id"])){
+  $stmt = $db->prepare("SELECT email, username, created, privacy from Users where id = :id");
+  $r = $stmt->execute([":id" => $_GET["id"]]);
+  $result = $stmt->fetchall(PDO::FETCH_ASSOC);
+  if ($result[0]["privacy"] == 0){
+    flash("Sorry, this account is private");
+  }
+}
+
 
 //save data if we submitted the form
 if (isset($_POST["saved"]) && $isValid) {
@@ -126,23 +148,48 @@ if (isset($_POST["saved"]) && $isValid) {
 }
 
 ?>
+<?php if(isset($_GET["id"]) && $result[0]["privacy"] == 1 ):?>
+  <h1>  <?php echo $result[0]["username"]?>'s PROFILE </h1>
+  <form>
+<fieldset disabled style = "margin-left: 5px; width:30%;">
+  <div class="mb-3">
+    <label for="disabledTextInput" class="form-label">username</label>
+    <input type="text" id="disabledTextInput" class="form-control" placeholder="<?php echo $result[0]["username"]?>">
+  </div>
+  <div class="mb-3">
+    <label for="disabledTextInput" class="form-label">joined</label>
+    <input type="text" id="disabledTextInput" class="form-control" placeholder="<?php echo $result[0]["created"]?>">
+  </div>
+</fieldset>
+</form>
+<?php endif?>
 
-    <form method="POST">
+<?php if(!isset($_GET["id"])):?>
+<h1> PROFILE </h1>
+<h5> Hello, <?php safer_echo(get_username()); ?> </h5>
+    <form method="POST" style = "margin-left: 5px; width:30%;">
         <label for="email">Email</label>
-        <input type="email" name="email" value="<?php safer_echo(get_email()); ?>"/>
+        <input class="form-control form-control-lg"  type="email" name="email" value="<?php safer_echo(get_email()); ?>"/>
         <label for="username">Username</label>
-        <input type="text" maxlength="60" name="username" value="<?php safer_echo(get_username()); ?>"/>
+        <input class="form-control" type="text" maxlength="60" name="username" value="<?php safer_echo(get_username()); ?>"/>
         <!-- DO NOT PRELOAD PASSWORD-->
         <label for="pw">Password</label>
-        <input type="password" name="password"/>
+        <input class="form-control" type="password" name="password"/>
         <label for="cpw">Confirm Password</label>
-        <input type="password" name="confirm"/>
+        <input class="form-control" type="password" name="confirm"/>
 
         <label for="currentpw">Current Password</label>
-        <input type="password" name="current"/>
+        <input class="form-control" class="form-control"   type="password" name="current"/>
 
-	 <input type="submit" name="saved" value="Save Profile"/>
-   <a href="pastOrders.php" class="btn btn-primary">past orders</a>
+	 <input class="btn btn-primary" type="submit" name="saved" value="Save Profile"/>
     </form>
+
+  <form method="POST" style = "margin-left: 5px; width:30%;">
+    <div class="btn-group" role="group" aria-label="Basic mixed styles example" style = "position: relative; top: -450; left: 400;">
+      <button type="submit" class="btn btn-danger" name = "private">private</button>
+      <button type="submit" class="btn btn-success"name = "public" >public</button>
+    </div>
+  </form>
 	<?php echo"Remember: <br> Cannot have '@' in your username <br> password cannot exceed 60 characters<br>";?>
+  <?php endif?>
 <?php require(__DIR__ . "/partials/flash.php");

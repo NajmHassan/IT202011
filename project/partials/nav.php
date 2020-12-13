@@ -94,7 +94,17 @@ background-color: #4c885b!important;
 
       <?php if (is_logged_in()): ?>
           <li class="nav-item">
-            <a class="nav-link" href="profile.php">profile</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Account
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="pastOrders.php">past orders</a>
+                <a class="dropdown-item" href="profile.php">profile</a>
+                <div class="dropdown-divider"></div>
+
+              </div>
+            </li>
           </li>
 
           <li class="nav-item">
