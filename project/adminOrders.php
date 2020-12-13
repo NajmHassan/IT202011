@@ -34,7 +34,7 @@ else {
   <div class="card-body">
     <h5 class="card-title">Order ID: <?php echo $o["id"]; ?> </h5>
     <p class="card-text">order placed on <?php echo $o["created"]; ?> </p>
-    <p class="card-text">order placed by:<a href= "profile.php?id=<?php echo $o["user_id"];?>"> <?php echo $o["username"]; ?> </p>
+    <p class="card-text">order placed by:<a href= "profile.php?id="<?php echo $o["user_id"]; ?>> <?php echo $o["username"]; ?></a></p>
     <a href="orderDetails.php?id=<?php safer_echo($o['id']); ?>" class="btn btn-primary">view details</a>
   </div>
 </div>
