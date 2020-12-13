@@ -29,6 +29,31 @@ if (isset($product_id)) {
 }
 
 
+
+
+
+if((isset($_POST["review"]) && isset($_POST["stars"])) && isset($_POST["reviewButton"])){
+  $r = $_POST["review"];
+  $s = $_POST["stars"];
+
+  $stmt = $db->prepare("INSERT INTO Ratings (product_id, user_id, rating, comment) VALUES (:pid, :uid, :r, :c )");
+  $r = $stmt->execute([":pid" => $product_id,
+                      ":uid" => get_user_id(),
+                      ":r" => $s,
+                      ":c" => $r]);
+  if($r)
+    flash("Thank you for the review!");
+  else
+  flash("there was a problem rating this product, please try again later");
+}
+
+//grabing all my reviews
+$stmt = $db->prepare("SELECT Ratings.comment,Ratings.rating, Ratings.created, Ratings.user_id, Users.username FROM Ratings JOIN Users on Ratings.user_id = Users.id WHERE Ratings.product_id = :id");
+$r = $stmt->execute([":id" => $product_id]);
+$rating = $stmt->fetchall(PDO::FETCH_ASSOC);
+
+
+
 ?>
 <script>
     //php will exec first so just the value will be visible on js side
@@ -58,38 +83,56 @@ if (isset($product_id)) {
     <h3>View product details</h3>
 
 
-    
+
 
     <?php if (isset($result) && !empty($result)): ?>
-      <div class="row row-cols-1 row-cols-md-2">
-        <div class="col mb-4">
           <div class="card">
-            <img src="..." class="card-img-top" alt="...">
+            <img src="..." class="card-img-top" style = "width: 240px; height: 240px;height: auto; float: left; margin: 3px; padding: 3px;">
             <div class="card-body">
               <h5 class="card-title"> <?php safer_echo($result["name"]); ?></h5>
               <p class="card-text">$<?php safer_echo($result["price"])?></p>
               <p class="card-text"><?php safer_echo($result["description"])?></p>
               <p class="card-text"><?php if($result["quantity"]>0){echo "In Stock";}else{echo "Out Of Stock";}?></p>
               <p class="card-text"><small class="text-muted">added on <?php safer_echo($result["modified"])?></small></p>
-
-
-
-
-            <form method="POST" >
-              <select class="form-control" id="quantity" name="quantity" style= "width: 50;">
-                <option>Does not work for now</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
               <button type="button" onclick="addToCart(<?php echo $product_id;?>);" class="btn btn-primary btn-lg">Add to Cart</button>
-            </form>
-
-              <div>
             </div>
           </div>
-        </div>
+
+            <form method="POST">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">already bought it? Review our Product!</h5>
+                  <label for="exampleFormControlInput1" class="form-label"></label>
+                  <input type="text" name="review" class="form-control" id="exampleFormControlInput1" placeholder="amazing product!" required>
+                  <select class="form-control" id="quantity" name="stars" style= "width: 50;">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                  <button type="submit" name = "reviewButton" class="btn btn-primary btn-lg">submit review</button>
+                <div>
+              </div>
+            </form>
+
+
+            <h1> PRODUCT REVIEWS </h1>
+          <?php foreach ($rating as $r):?>
+            <div class="card-group">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><a href=" profile.php?id= <?php echo $r["user_id"];?>"><?php echo $r["username"];?></a></h5>
+
+              <p class="card-text"><?php echo $r["rating"];?>/5</p>
+              <p class="card-text"><?php echo $r["comment"];?></p>
+              <p class="card-text"><small class="text-muted"><?php echo $r["created"];?></small></p>
+            </div>
+          </div>
+          </div>
+        <?php endforeach ?>
+
+
       <?php else: ?>
         <p>Error looking up id...</p>
       <?php endif; ?>
