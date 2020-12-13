@@ -15,7 +15,7 @@ $id = get_user_id();
 $results = [];
 
 
-$stmt = $db->prepare("SELECT user_id ,id, created from Orders LIMIT 10"); //DESC
+$stmt = $db->prepare("SELECT Orders.user_id ,Orders.id, Users.username as username, Orders.created from Orders join Users on Users.id =Orders.user_id LIMIT 10"); //DESC
 $r = $stmt->execute([":id" => $id]);
 if ($r) {
     $orders = $stmt->fetchall(PDO::FETCH_ASSOC);
@@ -34,7 +34,7 @@ else {
   <div class="card-body">
     <h5 class="card-title">Order ID: <?php echo $o["id"]; ?> </h5>
     <p class="card-text">order placed on <?php echo $o["created"]; ?> </p>
-    <p class="card-text">order placed by id: <?php echo $o["user_id"]; ?> </p>
+    <p class="card-text">order placed by:<a href= "profile.php?id=<?php echo $o["user_id"];?>"> <?php echo $o["username"]; ?> </p>
     <a href="orderDetails.php?id=<?php safer_echo($o['id']); ?>" class="btn btn-primary">view details</a>
   </div>
 </div>
