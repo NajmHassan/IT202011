@@ -51,6 +51,7 @@ echo "YOU GOT THIS ALREADY";
 
 if ($id == 12){// candle
 $src = "https://www.bathandbodyworks.com/dw/image/v2/BBDL_PRD/on/demandware.static/-/Sites-master-catalog/default/dw44fa8754/hires/024362003.jpg?sh=471";
+echo " YOU OPENED THIS BEFORE";
 }
 
 if ($id == 13){
@@ -74,9 +75,11 @@ if ($id == 16){ // scent thingie
 
 if ($id == 17){
   $src = "https://media1.popsugar-assets.com/files/thumbor/XTPw-WnHr3Q7ncFYEOH2Uvqqj4w/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2020/11/04/993/n/1922794/a534723e047a94e2_netimgpkVk2c/i/White-Eucalyptus-Sage-Three-Wick-Candle.jpg";
+  echo " YOU OPENED THIS BEFORE";
 }
 if ($id == 18){
   $src = "https://i.pinimg.com/originals/5f/b4/03/5fb4031f90d9feb4b21c6a8a8efda01c.png";
+  echo " YOU OPENED THIS BEFORE";
 }
 if ($id == 19){// candle
   $src = "https://www.justonecookbook.com/wp-content/uploads/2020/06/Dragon-Roll-0286-I-500x375.jpg";
@@ -100,12 +103,13 @@ if ($id == 23){
 }
 if ($id == 24){
   $src = "https://ci6.googleusercontent.com/proxy/l9z5Ad2Wue8c7ieVmU_YJgIM7FpYkzxN0FXGymYZSUDPZO_5QTwNA3xlB3D-OqTSuicJG6cYw0C_OoNDbqmecfIQpr6CCLIxxFFR64ei0h2SoZErGNXrvcW9vH_kAkNAYf_He4vyxNUNVLPlDzvCb2rQqk_A2nQf5YkbOv2jh5ZFGTl_=s0-d-e1-ft#http://img.ltwebstatic.com/images3_pi/2020/11/17/1605581298a6fe6086f1f225661fd3458f32d7ecf2_thumbnail_220x293.jpg";
+  echo " YOU OPENED THIS BEFORE";
 }
 if ($id == 25){
   $src = "";
 }
 if ($id == 26){
-  $src = "";
+  $src = "nothin here, i love you though :)";
 }
  ?>
  <img src="<?php echo $src;?>" alt="pick another gift dickhead">

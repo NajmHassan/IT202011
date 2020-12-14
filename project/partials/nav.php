@@ -119,9 +119,9 @@ background-color: #4c885b!important;
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="test_create_product.php">create product</a>
-          <a class="dropdown-item" href="test_list_product.php">View product</a>
+          <a class="dropdown-item" href="adminProducts.php">product list</a>
           <a class="dropdown-item" href="adminOrders.php">view past orders</a>
-          <a class="dropdown-item" href="test_create_cart.php">create Cart</a>
+          <a class="dropdown-item" href="adminOrderItems.php">Ordered Items</a>
           <a class="dropdown-item" href="test_list_cart.php">View Cart</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">I dont need this for now but im keeping it</a>
