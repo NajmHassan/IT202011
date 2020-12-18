@@ -5,31 +5,34 @@
 $results = [];
 $cat = 0;
 $db = getDB();
+$params = [];
+$per_page = 5;
+$cat = 0;
 
 
+$quantity = extractData("quantity");
+$query = "SELECT id,name, price, description, quantity FROM Products";
+$q  ="SELECT COUNT(*) as total FROM Products";
 
-if (has_role("Admin")) {
-  if (isset($_POST["outofstock"])) {
-    $stmt = $db->prepare("SELECT id,name, price, description, quantity FROM Products WHERE quantity = 0  ORDER BY price LIMIT 10");
-    $r = $stmt->execute();
-  }
-  elseif (isset($_POST["sort"])) {
-    $stmt = $db->prepare("SELECT AVG(Ratings.rating) as rating,Products.id as id, Products.name, Products.description, Products.quantity,Products.price  FROM Ratings JOIN Products on Products.id = Ratings.product_id GROUP BY product_id");
-    $r = $stmt->execute();
-
-
-    #$stmt = $db->prepare("SELECT Products.id,Products.name, Products.price, Products.description, Products.quantity, Ratings.rating as rate FROM Products Join Ratings on Ratings.product_id = Products.id");
-    #$r = $stmt->execute();
-  }
-  elseif (isset($_POST["quantity"])) {
-    $cat = $_POST["quantity"];
-    $stmt = $db->prepare("SELECT AVG(rating), product_id FROM `Ratings` GROUP BY product_id");
-    $r = $stmt->execute( [":q" => $cat]);
-  }else{
-    $stmt = $db->prepare("SELECT id,name, price, description, quantity FROM Products  LIMIT 10");
-    $r = $stmt->execute();
-  }
+if (isset($quantity)) {
+   $query .= " WHERE quantity <= :q";
+   $params[":q"] = $quantity;
+   $q  = "SELECT COUNT(*) as total FROM Products WHERE quantity <= :q";
 }
+
+
+$query .= " LIMIT :offset, :count";
+echo $query;
+paginate($q, $params, $per_page);
+
+$stmt = $db->prepare($query);
+$stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+$stmt->bindValue(":count", $per_page, PDO::PARAM_INT);
+foreach ($params as $key=>$val){
+  $stmt->bindValue($key, $val);
+}
+$r = $stmt->execute();
+
 
 if ($r) {
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -53,10 +56,7 @@ if ($r) {
       <input type="input" name="quantity" class="form-control" id="quantity" aria-describedby="emailHelp" required>
       <button style= "margin-right: 2em;"type="submit" name="quantitycheck" value="quantitycheck"  class="btn btn-primary">submit</button>
   </form>
-  <form method="POST" style="float: right;margin-right: 2em;">
-    <button style= "margin-right: 2em;"type="submit" name="outofstock" value="outofstock"  class="btn btn-primary">view out of stock</button>
-    <button style= "margin-right: 2em;"type="submit" name="sort" value="sort"  class="btn btn-primary">sort by rating</button>
-  </form>
+
 
 
 
@@ -83,4 +83,18 @@ if ($r) {
 <?php endforeach; ?>
 <?php endif; ?>
 </div>
+<nav aria-label="bla">
+    <ul class="pagination justify-content-center">
+        <li class="page-item <?php echo ($page-1) < 1?"disabled":"";?>">
+            <a class="page-link" href="?page=<?php echo $page-1;?>" tabindex="-1">Previous</a>
+        </li>
+        <?php for($i = 0; $i < $total_pages; $i++):?>
+            <li class="page-item <?php echo ($page-1) == $i?"active":"";?>"><a class="page-link" href="?page=<?php echo ($i+1);?>"><?php echo ($i+1);?></a></li>
+        <?php endfor; ?>
+        <li class="page-item <?php echo ($page) >= $total_pages?"disabled":"";?>">
+            <a class="page-link" href="?page=<?php echo $page+1;?>">Next</a>
+        </li>
+    </ul>
+</nav>
+
 <?php require_once(__DIR__ . "/partials/flash.php"); ?>
