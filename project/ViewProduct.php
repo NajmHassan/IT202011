@@ -46,10 +46,18 @@ if((isset($_POST["review"]) && isset($_POST["stars"])) && isset($_POST["reviewBu
   else
   flash("there was a problem rating this product, please try again later");
 }
-
+$per_page = 10;
+$q = " SELECT COUNT(*) as total from Ratings where product_id = :id";
+$p = [];
+$p[":id"] = $product_id;
+paginate($q, $p, $per_page);
 //grabing all my reviews
-$stmt = $db->prepare("SELECT Ratings.comment,Ratings.rating, Ratings.created, Ratings.user_id, Users.username FROM Ratings JOIN Users on Ratings.user_id = Users.id WHERE Ratings.product_id = :id");
-$r = $stmt->execute([":id" => $product_id]);
+$stmt = $db->prepare("SELECT Ratings.comment,Ratings.rating, Ratings.created, Ratings.user_id, Users.username FROM Ratings JOIN Users on Ratings.user_id = Users.id WHERE Ratings.product_id = :id LIMIT :offset, :count");
+$stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+$stmt->bindValue(":count", $per_page, PDO::PARAM_INT);
+$stmt->bindValue(":id", $product_id, PDO::PARAM_INT);
+$r = $stmt->execute();
+
 $rating = $stmt->fetchall(PDO::FETCH_ASSOC);
 
 
@@ -118,6 +126,7 @@ $rating = $stmt->fetchall(PDO::FETCH_ASSOC);
 
 
             <h1> PRODUCT REVIEWS </h1>
+
           <?php foreach ($rating as $r):?>
             <div class="card-group">
           <div class="card">
@@ -131,6 +140,20 @@ $rating = $stmt->fetchall(PDO::FETCH_ASSOC);
           </div>
           </div>
         <?php endforeach ?>
+        <nav aria-label="bla">
+            <ul class="pagination justify-content-center">
+                <li class="page-item <?php echo ($page-1) < 1?"disabled":"";?>">
+                    <a class="page-link" href="?id=<?php echo $product_id;?>&page=<?php echo $page-1;?>" tabindex="-1">Previous</a>
+                </li>
+                <?php for($i = 0; $i < $total_pages; $i++):?>
+                    <li class="page-item <?php echo ($page-1) == $i?"active":"";?>"><a class="page-link" href="?id=<?php echo $product_id;?>&page=<?php echo ($i+1);?>"><?php echo ($i+1);?></a></li>
+                <?php endfor; ?>
+                <li class="page-item <?php echo ($page) >= $total_pages?"disabled":"";?>">
+                    <a class="page-link" href="?id=<?php echo $product_id;?>&page=<?php echo $page+1;?>">Next</a>
+                </li>
+            </ul>
+        </nav>
+
 
 
       <?php else: ?>

@@ -5,42 +5,40 @@
 $results = [];
 $cat = 0;
 $db = getDB();
+$per_page = 10;
+
+$sort = extractData("sort");
+$rating = extractData("rating");
+$category = extractData ("category");
+$query = "SELECT id,name, price, description, (SELECT AVG(rating) from Ratings where product_id = Products.id GROUP BY product_id) as ratings FROM Products WHERE quantity > 0 and visibility = 1";
+$q = "SELECT count(*) as total FROM Products";
+
+  if(isset($category)){
+    $query .= " AND category = '$category'";
+    $q = "SELECT count(*) as total FROM Products WHERE category = '$category'";
+  }
 
 
+  if (isset($sort)){
+    $query .= " ORDER BY $sort";
+  }
 
-if (has_role("Admin")) {
-  if (isset($_POST["sort"])) {
-    $stmt = $db->prepare("SELECT id,name, price, description FROM Products WHERE quantity > 0  ORDER BY price LIMIT 10");
+
+    $query .= " LIMIT :offset, :count";
+
+
+    paginate($q, [], $per_page);
+
+    $stmt = $db->prepare($query);
+    $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+    $stmt->bindValue(":count", $per_page, PDO::PARAM_INT);
     $r = $stmt->execute();
-  }
-  elseif (isset($_POST["category"])) {
-    $cat = $_POST["category"];
-    $stmt = $db->prepare("SELECT id,name, price, description FROM Products WHERE quantity > 0  AND category = :q LIMIT 10");
-    $r = $stmt->execute( [":q" => $cat]);
-  }else{
-    $stmt = $db->prepare("SELECT id,name, price, description FROM Products  LIMIT 10");
-    $r = $stmt->execute();
-  }
-}else{
-  if (isset($_POST["sort"])) {
-    $stmt = $db->prepare("SELECT id,name, price, description FROM Products WHERE quantity > 0 AND visibility = 1  ORDER BY price LIMIT 10");
-    $r = $stmt->execute();
-  }
-  elseif (isset($_POST["category"])) {
-    $cat = $_POST["category"];
-    $stmt = $db->prepare("SELECT id,name, price, description FROM Products WHERE quantity > 0  AND category = :q AND visibility = 1 LIMIT 10");
-    $r = $stmt->execute( [":q" => $cat]);
-  }else{
-    $stmt = $db->prepare("SELECT id,name, price, description FROM Products WHERE quantity > 0  AND visibility = 1 LIMIT 10");
-    $r = $stmt->execute();
-  }
-}
 
 if ($r) {
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 else {
-    flash("There was a problem fetching the products " . var_export($stmt->errorInfo(), true));
+    flash("There was a problem fetching the products ");
 }
 
 
@@ -51,6 +49,8 @@ $r = $stmt->execute();
 if ($r) {
     $category = $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+
+
 ?>
 
 <script>
@@ -83,7 +83,20 @@ if ($r) {
 
   <div>
   <form method="POST" style="float: right; margin-top: 3em; display: inline-flex; margin-right: 2em;" id = "form1">
-    <button style= "margin-right: 2em;"type="submit" name="sort" value="sort"  class="btn btn-primary">low-high</button>
+
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      sort by
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+      <button type="submit" class="dropdown-item" name = "sort" value = "price ASC" >price low-high</button>
+      <button type="submit" class="dropdown-item" name = "sort" value = "price DESC" >price high-low</button>
+
+      <button type="submit" class="dropdown-item" name = "sort" value = "Ratings ASC" > rating low-high</button>
+      <button type="submit" class="dropdown-item" name = "sort" value = "Ratings DESC" > rating high-low</button>
+    </div>
+
+
+
     <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Categories
@@ -96,10 +109,6 @@ if ($r) {
   </div>
   </form>
   </div>
-
-
-
-
 <h1>PRODUCTS</h1>
 <div class="row" style= "margin-left: 4em;">
 <?php if (count($results) > 0): ?>
@@ -120,5 +129,22 @@ if ($r) {
         </div>
 <?php endforeach; ?>
 <?php endif; ?>
+
 </div>
+
+
+<nav aria-label="bla">
+    <ul class="pagination justify-content-center">
+        <li class="page-item <?php echo ($page-1) < 1?"disabled":"";?>">
+            <a class="page-link" href="?page=<?php echo $page-1;?>" tabindex="-1">Previous</a>
+        </li>
+        <?php for($i = 0; $i < $total_pages; $i++):?>
+            <li class="page-item <?php echo ($page-1) == $i?"active":"";?>"><a class="page-link" href="?page=<?php echo ($i+1);?>"><?php echo ($i+1);?></a></li>
+        <?php endfor; ?>
+        <li class="page-item <?php echo ($page) >= $total_pages?"disabled":"";?>">
+            <a class="page-link" href="?page=<?php echo $page+1;?>">Next</a>
+        </li>
+    </ul>
+</nav>
+
 <?php require_once(__DIR__ . "/partials/flash.php"); ?>
